@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -38,38 +38,38 @@ export default function SlideShow() {
     }, []);
 
     return (
-        <div className="flex justify-center py-8 px-8">
-            <div className="flex w-[1200px] h-[500px] rounded-3xl overflow-hidden shadow-lg bg-white">
+        <div className="flex justify-center py-8 px-4 md:px-8">
+            <div className="flex flex-col md:flex-row w-full md:w-[1200px] h-auto md:h-[500px] rounded-3xl overflow-hidden shadow-lg bg-white">
                 {/* Kiri */}
-                <div className="bg-green-900 text-white flex flex-col justify-center px-12 w-1/3 relative">
-                    <h1 className="text-4xl font-bold mb-4">{events[current].title}</h1>
+                <div className="bg-green-900 transform -skew-br-12 text-white flex flex-col justify-center px-6 md:px-12 py-8 md:py-0 w-full md:w-1/3 relative">
+                    <h1 className="text-3xl md:text-4xl font-bold mb-4">{events[current].title}</h1>
                     <Link
                         href={events[current].link}
-                        className="mt-4 inline-block border border-green-400 rounded-lg px-8 py-3 text-lg font-medium hover:bg-green-800 transition"
+                        className="mt-4 inline-block border border-green-400 rounded-lg px-6 md:px-8 py-3 text-base md:text-lg font-medium hover:bg-green-800 transition"
                     >
                         Lihat Tiket
                     </Link>
                     {/* Indikator */}
-                    <div className="flex gap-3 mt-12">
+                    <div className="flex gap-3 mt-8 md:mt-12">
                         {events.map((_, idx) => (
                             <span
                                 key={idx}
-                                className={`w-5 h-5 rounded-full ${idx === current ? "bg-white" : "bg-green-700"}`}
+                                className={`w-4 h-4 md:w-5 md:h-5 rounded-full ${idx === current ? "bg-white" : "bg-green-700"}`}
                                 onClick={() => setCurrent(idx)}
                                 style={{ cursor: "pointer" }}
                             />
                         ))}
                     </div>
                 </div>
+
                 {/* Kanan */}
-                <div className="relative w-2/3">
+                <div className="relative w-full md:w-2/3 h-[300px] md:h-full">
                     <Image
                         src={events[current].image}
                         alt={events[current].title}
                         fill
-                        className="object-cover w-full h-full"
-                        style={{ objectFit: "cover" }}
-                        sizes="(max-width: 1200px) 100vw, 600px"
+                        className="object-cover transition-all duration-500"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 800px"
                         priority
                     />
                 </div>
