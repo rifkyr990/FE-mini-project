@@ -1,122 +1,292 @@
-"use client"
+"use client";
 
-import React, { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+type User = {
+name: string;
+profileImage: string | null;
+role: "CUSTOMER" | "ORGANIZER" | string;
+};
 
 export default function Navbar() {
+    const [user, setUser] = useState<User | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const router = useRouter();
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
+    const defaultAvatar = "https://www.gravatar.com/avatar/?d=mp";
+
+    const menuItems = [
+        { label: "Kategori", href: "#" },
+        { label: "Event Terbaru", href: "#" },
+        { label: "Tiket", href: "#" },
+        { label: "Promo", href: "#" },
+        { label: "Tentang", href: "#" },
+    ];
+
+    useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+        const parsed: User = JSON.parse(storedUser);
+        setUser(parsed);
+    }
+    }, []);
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
+        router.push("/auth/login");
     };
 
+    // Close user menu on click outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            const target = event.target as HTMLElement;
+                if (!target.closest("#user-menu-button") && !target.closest("#user-menu-items")) {
+                setIsUserMenuOpen(false);
+            }
+        }
+        if (isUserMenuOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, [isUserMenuOpen]);
+
     return (
-        <nav className="w-full bg-white shadow-md py-4">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between">
-                    {/* Logo */}
-                    <div className="flex items-center">
-                        <span className="text-2xl sm:text-3xl font-extrabold text-green-700">
-                            TiKeT
-                        </span>
-                        <span className="text-2xl sm:text-3xl font-extrabold text-black">
-                            .com
-                        </span>
-                    </div>
-
-                    {/* Desktop Menu */}
-                    <ul className="hidden md:flex space-x-6 lg:space-x-8">
-                        <li>
-                            <Link href="#"
-                                className="text-gray-700 hover:text-green-500 font-medium transition-colors">
-                                Kategori
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="#"
-                                className="text-gray-700 hover:text-green-500 font-medium transition-colors">
-                                Event Terbaru
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="#"
-                                className="text-gray-700 hover:text-green-500 font-medium transition-colors">
-                                Tiket
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="#"
-                                className="text-gray-700 hover:text-green-500 font-medium transition-colors">
-                                Promo
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="#"
-                                className="text-gray-700 hover:text-green-500 font-medium transition-colors">
-                                Tentang
-                            </Link>
-                        </li>
-                    </ul>
-
-                    {/* Mobile menu button */}
-                    <div className="md:hidden">
-                        <button
-                            onClick={toggleMenu}
-                            className="text-gray-700 hover:text-green-500 focus:outline-none focus:text-green-500"
-                            aria-label="Toggle menu"
-                        >
-                            <svg
-                                className="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                {isMenuOpen ? (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                ) : (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                )}
-                            </svg>
-                        </button>
-                    </div>
+        <nav className="w-full bg-white shadow-md py-6 relative z-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            {/* Logo */}
+                <div className="flex items-center">
+                    <span className="text-2xl sm:text-3xl font-extrabold text-green-700">TiKeT</span>
+                    <span className="text-2xl sm:text-3xl font-extrabold text-black">.com</span>
                 </div>
 
-                {/* Mobile Menu */}
-                <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
-                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t mt-4">
-                        <Link href="#"
-                            className="block px-3 py-2 text-gray-700 hover:text-green-500 font-medium transition-colors">
-                            Kategori
-                        </Link>
-                        <Link href="#"
-                            className="block px-3 py-2 text-gray-700 hover:text-green-500 font-medium transition-colors">
-                            Event Terbaru
-                        </Link>
-                        <Link href="#"
-                            className="block px-3 py-2 text-gray-700 hover:text-green-500 font-medium transition-colors">
-                            Tiket
-                        </Link>
-                        <Link href="#"
-                            className="block px-3 py-2 text-gray-700 hover:text-green-500 font-medium transition-colors">
-                            Promo
-                        </Link>
-                        <Link href="#"
-                            className="block px-3 py-2 text-gray-700 hover:text-green-500 font-medium transition-colors">
-                            Tentang
-                        </Link>
+            {/* Desktop Menu */}
+                <div className="hidden md:flex space-x-6 items-center">
+                    {menuItems.map((item) => (
+                    <Link key={item.label} href={item.href} className="text-gray-700 hover:text-green-500 font-medium">
+                        {item.label}
+                    </Link>
+                    ))}
+
+                    {user ? (
+                    <div className="relative">
+                        <button
+                            id="user-menu-button"
+                            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                            className="flex items-center space-x-2 bg-gray-100 px-4 py-1.5 rounded-md hover:bg-gray-200 focus:outline-none"
+                            aria-haspopup="true"
+                            aria-expanded={isUserMenuOpen}
+                        >
+                        <img
+                            src={user.profileImage ?? defaultAvatar}
+                            alt={user.name}
+                            className="w-8 h-8 rounded-full object-cover"
+                        />
+                        <span className="text-green-700 font-semibold">{user.name}</span>
+                        <svg
+                            className={`w-4 h-4 ml-1 text-green-700 transform transition-transform duration-200 ${
+                            isUserMenuOpen ? "rotate-180" : "rotate-0"
+                            }`}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                        </button>
+
+                        {isUserMenuOpen && (
+                            <div
+                                id="user-menu-items"
+                                className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10 animate-fade-in scale-in-origin-top-right"
+                                role="menu"
+                                aria-orientation="vertical"
+                                aria-labelledby="user-menu-button"
+                            >
+                                {user.role === "ORGANIZER" && (
+                                <Link
+                                    href="/organizer/dashboard"
+                                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    role="menuitem"
+                                    onClick={() => setIsUserMenuOpen(false)}
+                                >
+                                    Dashboard
+                                </Link>
+                                )}
+                                <Link
+                                href="/profile"
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                role="menuitem"
+                                onClick={() => setIsUserMenuOpen(false)}
+                                >
+                                Profile
+                                </Link>
+                                <button
+                                onClick={() => {
+                                    logout();
+                                    setIsUserMenuOpen(false);
+                                }}
+                                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                                role="menuitem"
+                                >
+                                Logout
+                                </button>
+                            </div>
+                        )}
                     </div>
+                    ) : (
+                    <>
+                        <Link href="/auth/signup">
+                        <button className="border border-green-700 text-green-700 hover:bg-green-50 py-1.5 px-5 rounded-md font-medium transition-all">
+                            Signup
+                        </button>
+                        </Link>
+                        <Link href="/auth/login">
+                        <button className="bg-green-700 hover:bg-green-800 py-2 px-5 rounded-md text-white font-medium transition-all">
+                            Login
+                        </button>
+                        </Link>
+                    </>
+                    )}
+                </div>
+
+            {/* Mobile Menu Button */}
+                <div className="md:hidden">
+                    <button
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        className="text-gray-700 hover:text-green-500 focus:outline-none"
+                        aria-label="Toggle menu"
+                    >
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        {isMenuOpen ? (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        ) : (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                        )}
+                    </svg>
+                    </button>
                 </div>
             </div>
+
+            {/* Mobile Menu */}
+            {isMenuOpen && (
+            <div className="md:hidden px-4 pt-4 pb-6 bg-white border-t mt-4 space-y-2">
+                {menuItems.map((item) => (
+                <Link
+                    key={item.label}
+                    href={item.href}
+                    className="block px-3 py-2 text-gray-700 hover:text-green-500 font-medium transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                >
+                    {item.label}
+                </Link>
+                ))}
+
+                {user ? (
+                <div className="relative w-full">
+                    <button
+                        onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                        className="flex items-center justify-between w-full bg-gray-100 px-4 py-2 rounded-md hover:bg-gray-200 focus:outline-none"
+                        aria-haspopup="true"
+                        aria-expanded={isUserMenuOpen}
+                    >
+                    <div className="flex items-center space-x-2">
+                        <img
+                            src={user.profileImage ?? defaultAvatar}
+                            alt={user.name}
+                            className="w-8 h-8 rounded-full object-cover"
+                        />
+                        <span className="text-green-700 font-semibold">{user.name}</span>
+                    </div>
+                    <svg
+                        className={`w-4 h-4 text-green-700 transform transition-transform duration-200 ${
+                        isUserMenuOpen ? "rotate-180" : "rotate-0"
+                        }`}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                    </button>
+
+                    {isUserMenuOpen && (
+                    <div
+                        className="mt-2 bg-white border border-gray-200 rounded-md shadow-lg divide-y w-full animate-fade-in scale-in-origin-top-right"
+                        role="menu"
+                        aria-orientation="vertical"
+                    >
+                        {user.role === "ORGANIZER" && (
+                        <Link
+                            href="/organizer/dashboard"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            role="menuitem"
+                            onClick={() => {
+                            setIsUserMenuOpen(false);
+                            setIsMenuOpen(false);
+                            }}
+                        >
+                            Dashboard
+                        </Link>
+                        )}
+                        <Link
+                            href="/profile"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            role="menuitem"
+                            onClick={() => {
+                                setIsUserMenuOpen(false);
+                                setIsMenuOpen(false);
+                        }}
+                        >
+                        Profile
+                        </Link>
+                        <button
+                            onClick={() => {
+                                logout();
+                                setIsUserMenuOpen(false);
+                                setIsMenuOpen(false);
+                        }}
+                            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                            role="menuitem"
+                        >
+                        Logout
+                        </button>
+                    </div>
+                    )}
+                    </div>
+                    ) : (
+                    <>
+                        <Link href="/auth/signup">
+                        <button className="w-full border border-green-700 text-green-700 hover:bg-green-50 px-4 py-2 rounded-md font-medium transition-all">
+                            Signup
+                        </button>
+                        </Link>
+                        <Link href="/auth/login">
+                        <button className="w-full bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-md font-medium transition-all">
+                            Login
+                        </button>
+                        </Link>
+                    </>
+                    )}
+                </div>
+            )}
+
+            <style>{`
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: scale(0.95); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+                .animate-fade-in {
+                    animation: fadeIn 0.2s ease forwards;
+                }
+                .scale-in-origin-top-right {
+                    transform-origin: top right;
+                }
+            `}</style>
         </nav>
     );
 }
