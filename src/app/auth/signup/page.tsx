@@ -10,6 +10,7 @@ const SignUpForm = () => {
     name: "",
     email: "",
     password: "",
+    referralCode: "",
     role: "",
   });
 
@@ -124,6 +125,18 @@ const SignUpForm = () => {
                 <option value="CUSTOMER">Customer</option>
                 <option value="ORGANIZER">Organizer</option>
               </select>
+            </div>
+
+            {/* Referal code */}
+            <div>
+              <label htmlFor="referal code" className='block text-sm font-medium text-gray-700 mb-1'>Referal code</label>
+              <input
+              type="text"
+              value={formData.referralCode}
+              onChange={handleChange}
+              className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500'
+              placeholder='Opsional'
+              />
             </div>
 
             {/* Terms */}

@@ -24,6 +24,7 @@ const LoginForm = () => {
 
       const profileRes = await api.get("/api/auth/profile");
       localStorage.setItem("user", JSON.stringify(profileRes.data));
+      
       dispatch(setSignIn(profileRes.data));
       router.push("/");
 
