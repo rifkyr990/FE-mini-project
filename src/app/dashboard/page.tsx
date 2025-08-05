@@ -25,7 +25,7 @@ export default function Home() {
 
     const fetchData = async () => {
         try {
-            const token = localStorage.getItem('token'); // 👈 hanya dipanggil di browser
+            const token = localStorage.getItem('token');
             const res = await api.get('/api/dashboard/stats', {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -46,7 +46,7 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="flex">
+        <div className="flex min-h-screen">
             <Sidebar />
             <div className="flex-1 flex flex-col">
                 <Header />

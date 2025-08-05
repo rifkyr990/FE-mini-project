@@ -1,39 +1,37 @@
 "use client";
-
+import React from 'react'
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 type User = {
-name: string;
-profileImage: string | null;
-role: "CUSTOMER" | "ORGANIZER" | string;
-points?: number;
+    name: string;
+    profileImage: string | null;
+    role: "CUSTOMER" | "ORGANIZER" | string;
+    points?: number;
 };
-
-import React from 'react'
 
 const navbar = () => {
     const [user, setUser] = useState<User | null>(null);
-        const [isMenuOpen, setIsMenuOpen] = useState(false);
-        const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-        const router = useRouter();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const router = useRouter();
 
-        const defaultAvatar = "https://www.gravatar.com/avatar/?d=mp";
+    const defaultAvatar = "https://www.gravatar.com/avatar/?d=mp";
 
-        const menuItems = [
-            { label: "Beranda", href: "/" },
-            { label: "Kategori", href: "#" },
-            { label: "Event Terbaru", href: "#" },
-            { label: "Tiket", href: "#" },
-            { label: "Promo", href: "#" },
-            { label: "Tentang", href: "#" },
-        ];
+    const menuItems = [
+        { label: "Beranda", href: "/" },
+        { label: "Kategori", href: "#" },
+        { label: "Event Terbaru", href: "#" },
+        { label: "Tiket", href: "#" },
+        { label: "Promo", href: "#" },
+        { label: "Tentang", href: "#" },
+    ];
 
-        useEffect(() => {
-            const storedUser = localStorage.getItem("user");
-            if (storedUser) {
+    useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
                 const parsed: User = JSON.parse(storedUser);
                 setUser(parsed);
             }
@@ -203,12 +201,12 @@ const navbar = () => {
                 {user ? (
                 <div className="relative w-full">
                     <div className="flex items-center space-x-2 px-3 py-2">
-                    <img
-                        src={user.profileImage ?? defaultAvatar}
-                        alt={user.name}
-                        className="w-8 h-8 rounded-full object-cover"
-                    />
-                    <span className="text-green-700 font-semibold">{user.name}</span>
+                        <img
+                            src={user.profileImage ?? defaultAvatar}
+                            alt={user.name}
+                            className="w-8 h-8 rounded-full object-cover"
+                        />
+                        <span className="text-green-700 font-semibold">{user.name}</span>
                     </div>
 
                     {user.points !== undefined && (

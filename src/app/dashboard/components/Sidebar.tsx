@@ -1,15 +1,70 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import {
+  Bars3Icon,
+  XMarkIcon,
+  HomeIcon,
+  CalendarDaysIcon,
+  CreditCardIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/outline";
+
 export default function Sidebar() {
+  
+
   return (
-    <aside className="w-64 h-screen bg-gray-800 text-white p-6">
-      <h1 className="text-2xl font-bold mb-6">MyDashboard</h1>
-      <nav>
-        <ul className="space-y-4">
-          <li className="hover:text-blue-300">Dashboard</li>
-          <li className="hover:text-blue-300">Events</li>
-          <li className="hover:text-blue-300">Transactions</li>
-          <li className="hover:text-blue-300">Settings</li>
-        </ul>
-      </nav>
-    </aside>
+    <div className="flex">
+
+      {/* Sidebar */}
+      <aside
+        className="w-84  bg-gray-800 text-white h-screen p-4 pt-6 transition-all duration-300 md:static overflow-hidden z-40"
+      >
+        <h1 className="text-2xl font-bold mb-10 px-2">📊 MyDashboard</h1>
+        <nav>
+          <ul className="space-y-7">
+            <li>
+              <Link
+                href="/dashboard/"
+                className="flex items-center gap-2 hover:text-blue-300 transition px-2"
+              >
+                <HomeIcon className="h-5 w-5" />
+                  Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/dashboard/events/"
+                className="flex items-center gap-2 hover:text-blue-300 transition px-2"
+              >
+                <CalendarDaysIcon className="h-5 w-5" />
+                Events
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/dashboard/transactions/"
+                className="flex items-center gap-2 hover:text-blue-300 transition px-2"
+              >
+                <CreditCardIcon className="h-5 w-5" />
+                Transactions
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/dashboard/settings/"
+                className="flex items-center gap-2 hover:text-blue-300 transition px-2"
+              >
+                <Cog6ToothIcon className="h-5 w-5" />
+                Settings
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      {/* Spacer for fixed sidebar */}
+    </div>
   );
 }
