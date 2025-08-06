@@ -11,11 +11,11 @@ import PieChartTransactions from './components/PieChartTransactions';
 
 
 type StatsData = {
-  totalEvents: number;
-  totalTransactions: number;
-  acceptTransaction: number;
-  totalTicketsSold: number;
-  totalRevenue: number;
+    totalEvents: number;
+    totalTransactions: number;
+    acceptTransaction: number;
+    totalTicketsSold: number;
+    totalRevenue: number;
 };
 
 export default function Home() {

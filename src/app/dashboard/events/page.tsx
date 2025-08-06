@@ -25,19 +25,33 @@ interface EventType {
 export default function EventPage() {
     const [events, setEvents] = useState<EventType[]>([]);
     const [editingEvent, setEditingEvent] = useState<EventType | null>(null);
+    const [loading, setLoading] = useState(true);
 
     const fetchEvents = async () => {
         try {
-        const res = await api.get("/api/events");
-        setEvents(res.data);
+            const token = localStorage.getItem('token');
+            const res = await api.get('/api/events/organizer', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setEvents(res.data);
+            setLoading(false);
+
         } catch (error) {
-        console.error("Gagal memuat data event:", error);
+            setLoading(false);
+            console.error("Gagal memuat data event:", error);
         }
     };
 
     useEffect(() => {
         fetchEvents();
     }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
 
     const handleSubmit = async (formData: any) => {
         try {
